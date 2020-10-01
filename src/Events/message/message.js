@@ -27,7 +27,7 @@ module.exports = class extends Event {
 
 		let remaining = await this._runLimits(message, command);
 		if (remaining) {
-			remaining = ms(remaining, { long: true });
+			remaining = ms(remaining - Date.now(), { long: true });
 			message.channel.send(`Sorry **${message.author}**, you have to wait **${remaining}** before running this command.`);
 			return;
 		}
@@ -67,14 +67,15 @@ module.exports = class extends Event {
 						this.client.clearTimeout(bucket.timeout);
 					}
 
-					bucket.reset += command.ratelimit.reset;
+					bucket.reset = (bucket.resetsIn - Date.now()) + command.ratelimit.reset;
 					bucket.timeout = this.client.setTimeout(tout, bucket.reset);
 				}
 
 				bucket.limited = true;
 			}
 
-			return bucket.reset;
+			const reset = bucket.resetsIn = Date.now() + bucket.reset;
+			return reset;
 		}
 
 		--bucket.remaining;
