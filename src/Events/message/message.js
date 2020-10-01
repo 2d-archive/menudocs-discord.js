@@ -74,8 +74,8 @@ module.exports = class extends Event {
 				bucket.limited = true;
 			}
 
-			const reset = bucket.resetsIn = Date.now() + bucket.reset;
-			return reset;
+			bucket.resetsIn = Date.now() + bucket.reset;
+			return bucket.resetsIn;
 		}
 
 		--bucket.remaining;
