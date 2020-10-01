@@ -40,7 +40,9 @@ module.exports = class extends Command {
 				`The bot's prefix is: ${this.client.prefix}`,
 				`Command Parameters: \`<>\` is strict & \`[]\` is optional`
 			]);
+
 			let categories;
+			console.log(this.client.owners);
 			if (!this.client.owners.includes(message.author.id)) {
 				categories = this.client.utils.removeDuplicates(this.client.commands.filter(cmd => cmd.category !== 'Owner').map(cmd => cmd.category));
 			} else {
