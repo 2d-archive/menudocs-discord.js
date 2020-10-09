@@ -1,21 +1,18 @@
 import fetch from "node-fetch";
 import { Command, MenuDocsEmbed } from "@lib";
-import { EXTENSIONS } from "./Cat";
+import { IMG_EXT } from "./Cat";
 
-const subreddits = ["dog", "dogs", "dogpics", "puppies"];
+const subreddit = () => {
+  const subreddits = ["dog", "dogs", "dogpics", "puppies"];
+  return subreddits[Math.floor(Math.random() * subreddits.length)];
+};
 
 export default class DogCommand extends Command {
 
   async run(message) {
-    const data = await fetch(
-        `https://imgur.com/r/${
-          subreddits[Math.floor(Math.random() * subreddits.length)]
-        }/hot.json`
-      )
-        .then((response) => response.json())
-        .then((body) =>
-          body.data.filter((post) => EXTENSIONS.includes(post.ext))
-        ),
+    const data = await fetch(`https://imgur.com/r/${subreddit()}/hot.json`)
+        .then((res) => res.json())
+        .then((res) => res.data.filter((post) => IMG_EXT.includes(post.ext))),
       selected = data[Math.floor(Math.random() * data.length)];
 
     const embed = new MenuDocsEmbed().setImage(
