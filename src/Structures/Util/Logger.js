@@ -73,7 +73,7 @@ export class Logger {
         process.stderr.write(`${message}${EOL}`) :
         console.error(message);
     } else {
-      return cons._stdout ?
+      return cons._stderr ?
         process.stdout.write(`${message}${EOL}`) :
         console.log(message);
     }
@@ -121,36 +121,7 @@ export class Logger {
         .map((msg) => `   {${levelColor}}-{reset} ${msg}`)
         .join("\n")}`;
     } else if (message instanceof Error) {
-      const anyError = message;
-      const stack =
-        typeof anyError[inspect.custom] === "function" ?
-          inspect(message, false, 0, false) :
-          message.stack;
-
-      message = stack
-        .replace(
-          ERROR_STACK_LINE_COLOR_REGEX,
-          (__, tfn, l1, l2) =>
-            `    {yellow}{bold}at{reset} ${
-              tfn ? `{cyan}${tfn}` : ""
-            }{reset}{dim}${l2 || ""} ${l1 || ""}{reset}`
-        )
-        .replace(
-          NODEJS_SOURCE_MAPPED_LINE_COLOR_REGEX,
-          (__, location) => `        {green}->{reset} {dim}${location}{reset}`
-        )
-        .replace(ERROR_HEADER_COLOR_REGEX, (__, cb, en, msg) => {
-          let code = "";
-          if (msg.startsWith("(")) {
-            const lastIndex = msg.indexOf(")");
-            code = msg.substr(1, lastIndex - 1);
-            msg = msg.substr(lastIndex + 1);
-          }
-
-          return `{underline}${en}{reset}: ${
-            code ? "(" : ""
-          }{magenta}${code}{reset}${code ? ")" : ""}${msg}`;
-        });
+      message = this._formatError(message);
     }
 
     let formatted = `{gray}${timestamp} ${_level}{gray} (${_scope}{gray}){reset}${
@@ -163,6 +134,39 @@ export class Logger {
     }
 
     return formatted;
+  }
+
+  _formatError(error) {
+    const anyError = error;
+    const stack =
+      typeof anyError[inspect.custom] === "function" ?
+        inspect(error, false, 0, false) :
+        error.stack;
+
+    return stack
+      .replace(
+        ERROR_STACK_LINE_COLOR_REGEX,
+        (__, tfn, l1, l2) =>
+          `    {yellow}{bold}at{reset} ${
+            tfn ? `{cyan}${tfn}` : ""
+          }{reset}{dim}${l2 || ""} ${l1 || ""}{reset}`
+      )
+      .replace(
+        NODEJS_SOURCE_MAPPED_LINE_COLOR_REGEX,
+        (__, location) => `        {green}->{reset} {dim}${location}{reset}`
+      )
+      .replace(ERROR_HEADER_COLOR_REGEX, (__, cb, en, msg) => {
+        let code = "";
+        if (msg.startsWith("(")) {
+          const lastIndex = msg.indexOf(")");
+          code = msg.substr(1, lastIndex - 1);
+          msg = msg.substr(lastIndex + 1);
+        }
+
+        return `{underline}${en}{reset}: ${
+          code ? "(" : ""
+        }{magenta}${code}{reset}${code ? ")" : ""}${msg}`;
+      });
   }
 
 }
