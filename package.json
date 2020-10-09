@@ -26,6 +26,7 @@
     "prettier": "^2.1.2"
   },
   "dependencies": {
+    "@extreme_hero/deeptype": "^1.0.1",
     "ansikit": "^1.1.4",
     "diff": "^4.0.2",
     "discord.js": "^12.2.0",
