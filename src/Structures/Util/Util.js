@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 2020. MeLike2D All Rights Reserved.
- * Neo is licensed under the MIT License.
- * See the LICENSE file in the project root for more details.
- */
-
 import { dirname, join, parse } from "path";
 import { promisify } from "util";
 import { Command as BaseCommand } from "../Classes/Command";
@@ -27,6 +21,10 @@ export class Util {
 
   get directory() {
     return dirname(require.main.filename);
+  }
+
+  checkOwner(id) {
+    return this.client.owners.includes(id);
   }
 
   trimArray(arr, maxLen = 10) {
