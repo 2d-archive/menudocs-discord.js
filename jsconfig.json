@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "rootDir": "src",
+    "paths": {
+      "@lib": ["Structures"]
+    }
+  },
+  "include": ["./src"]
+}
