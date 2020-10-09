@@ -1,4 +1,6 @@
 {
   "prefix": "!",
-  "token": "token here"
+  "token": "token here",
+  "owners": [],
+  "defaultPerms": 0
 }
