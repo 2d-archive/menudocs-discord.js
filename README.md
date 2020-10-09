@@ -1,4 +1,4 @@
-# Hello 👋🏽
+# Hello 👋🏼
 
 > This is a repository for things I would do if I was doing the tutorials...
 
