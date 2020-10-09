@@ -1,21 +1,21 @@
-const Command = require('../Structures/Command.js');
+import { Command } from "@lib";
 
-module.exports = class extends Command {
+export default class extends Command {
 
-	constructor(...args) {
-		super(...args, {
-			aliases: ['hallo'],
-			ratelimit: {
-				bucket: 2,
-				// seven seconds
-				reset: 7 * 1000,
-				stack: false
-			}
-		});
-	}
+  constructor(...args) {
+    super(...args, {
+      aliases: ["hallo"],
+      ratelimit: {
+        bucket: 2,
+        // seven seconds
+        reset: 7 * 1000,
+        stack: false
+      }
+    });
+  }
 
-	async run(message) {
-		message.channel.send('Hello!');
-	}
+  async run(message) {
+    message.channel.send("Hello!");
+  }
 
-};
+}

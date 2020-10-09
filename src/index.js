@@ -1,5 +1,12 @@
-const MenuDocsClient = require('./Structures/MenuDocsClient');
-const config = require('../config.json');
+import "module-alias/register";
+import { Logger, MenuDocsClient } from "@lib";
 
-const client = new MenuDocsClient(config);
-client.start();
+const logger = new Logger("main");
+
+logger.debug("Starting the bot!");
+(async () => {
+  await new MenuDocsClient(require("../config.json"))
+    .start();
+})().catch((error) => {
+  logger.fatal(error);
+});

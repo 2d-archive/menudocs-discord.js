@@ -1,10 +1,12 @@
-const Command = require('../../Structures/Command');
-const figlet = require('util').promisify(require('figlet'));
+import { Command } from "@lib";
+import { promisify } from "util";
+import _figlet from "figlet";
 
-module.exports = class extends Command {
+const figlet = promisify(_figlet);
+export default class extends Command {
 
-	async run(msg, ...banner) {
-		return msg.channel.send(await figlet(banner), { code: true });
-	}
+  async run(msg, ...banner) {
+    return msg.channel.send(await figlet(banner), { code: true });
+  }
 
-};
+}
