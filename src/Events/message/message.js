@@ -11,7 +11,7 @@ export default class extends Listener {
 
   async run(message) {
     const aloneRegexp = RegExp(`^<@!?${this.client.user.id}>$`);
-    const prefixRegexp = RegExp(`^<@!?${this.client.user.id}> `);
+    const prefixRegexp = RegExp(`^<@!?${this.client.user.id}>\\s*`);
 
     if (!message.guild || message.author.bot) return;
     if (message.content.match(aloneRegexp)) {
