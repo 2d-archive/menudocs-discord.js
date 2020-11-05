@@ -2,7 +2,7 @@ import { Command, ShiryoEmbed } from "@lib";
 import { inspect } from "util";
 import { Type } from "@extreme_hero/deeptype";
 
-export default class EvalCommand extends Command {
+export class EvalCommand extends Command {
 
   constructor(...args) {
     super(...args, {
@@ -16,6 +16,7 @@ export default class EvalCommand extends Command {
 
     let code = args.join(" ")
       .replace(/[“”]/g, "\"").replace(/[‘’]/g, "'");
+
     if (code.includes("await")) {
       code = `(async () => {${code}})()`;
     }

@@ -1,8 +1,8 @@
 import { dirname, join, parse } from "path";
 import { lstatSync, readdirSync } from "fs";
 
-import { Command as BaseCommand } from "../Classes/Command";
-import { Listener as BaseListener } from "../Classes/Listener";
+import { Command as BaseCommand } from "../classes/Command";
+import { Listener as BaseListener } from "../classes/Listener";
 
 export class Util {
 
@@ -151,9 +151,9 @@ export class Util {
       for (const file of readdirSync(dir)) {
         const path = join(dir, file), stats = lstatSync(path);
         if (stats.isFile() && path.endsWith(".js")) {
-          files.push(file);
+          files.push(path);
         } else if (stats.isDirectory()) {
-          files = files.concat(read(path, files));
+          files = files.concat(read(path));
         }
       }
 

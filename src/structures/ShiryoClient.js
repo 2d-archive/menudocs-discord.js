@@ -1,5 +1,5 @@
-import { Logger } from "./Util/Logger";
-import { Util } from "./Util/Util";
+import { Logger } from "./util/Logger";
+import { Util } from "./util/Util";
 import { Client, Collection, Permissions } from "discord.js";
 
 export class ShiryoClient extends Client {

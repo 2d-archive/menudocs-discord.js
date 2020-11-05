@@ -3,7 +3,7 @@
     "baseUrl": "src",
     "rootDir": "src",
     "paths": {
-      "@lib": ["Structures"]
+      "@lib": ["structures"]
     }
   },
   "include": ["./src"]
