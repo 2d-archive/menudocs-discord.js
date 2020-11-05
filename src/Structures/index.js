@@ -3,6 +3,6 @@ export * from "./Classes/Listener";
 
 export * from "./Util/Logger";
 export * from "./Util/Util";
-export * from "./Util/MenuDocsEmbed";
+export * from "./Util/ShiryoEmbed";
 
-export * from "./MenuDocsClient";
+export * from "./ShiryoClient";

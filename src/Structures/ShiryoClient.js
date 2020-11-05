@@ -2,7 +2,7 @@ import { Logger } from "./Util/Logger";
 import { Util } from "./Util/Util";
 import { Client, Collection, Permissions } from "discord.js";
 
-export class MenuDocsClient extends Client {
+export class ShiryoClient extends Client {
 
   constructor(options = {}) {
     super({
@@ -10,18 +10,14 @@ export class MenuDocsClient extends Client {
     });
 
     this.validate(options);
+    this.owners = options.owners;
 
     this.commands = new Collection();
-
     this.aliases = new Collection();
-
     this.events = new Collection();
 
-    this.utils = new Util(this);
-
     this.logger = new Logger("client");
-
-    this.owners = options.owners;
+    this.utils = new Util(this);
   }
 
   validate(options) {
@@ -54,8 +50,11 @@ export class MenuDocsClient extends Client {
   }
 
   async start(token = this.token) {
+    /* (0) Load our commands and events. */
     await this.utils.loadCommands();
     await this.utils.loadEvents();
+
+    /* (1) Connect to Discord */
     await super.login(token);
   }
 

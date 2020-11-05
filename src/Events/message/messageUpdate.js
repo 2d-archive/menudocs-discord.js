@@ -1,4 +1,4 @@
-import { Listener, MenuDocsEmbed } from "@lib";
+import { Listener, ShiryoEmbed } from "@lib";
 import { diffWordsWithSpace } from "diff";
 import { Util } from "discord.js";
 
@@ -13,7 +13,7 @@ export default class extends Listener {
       return;
     }
 
-    const embed = new MenuDocsEmbed()
+    const embed = new ShiryoEmbed()
       .setColor("BLUE")
       .setAuthor(
         old.author.tag,

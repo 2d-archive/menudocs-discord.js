@@ -2,7 +2,7 @@ const { MessageEmbed } = require("discord.js");
 
 const ZWS = "\u200B";
 
-export class MenuDocsEmbed extends MessageEmbed {
+export class ShiryoEmbed extends MessageEmbed {
 
   constructor(...args) {
     super(...args);

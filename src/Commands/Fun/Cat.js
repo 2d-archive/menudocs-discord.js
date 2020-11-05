@@ -1,4 +1,4 @@
-import { Command, MenuDocsEmbed } from "@lib";
+import { Command, ShiryoEmbed } from "@lib";
 import fetch from "node-fetch";
 
 
@@ -17,7 +17,7 @@ export default class extends Command {
         .then((body) => body.data.filter((post) => IMG_EXT.includes(post.ext))),
       selected = data[Math.floor(Math.random() * data.length)];
 
-    const embed = new MenuDocsEmbed().setImage(
+    const embed = new ShiryoEmbed().setImage(
       `https://imgur.com/${selected.hash}${selected.ext.replace(/\?.*/, "")}`
     );
 

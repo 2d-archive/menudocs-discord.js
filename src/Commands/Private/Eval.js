@@ -1,4 +1,4 @@
-import { Command, MenuDocsEmbed } from "@lib";
+import { Command, ShiryoEmbed } from "@lib";
 import { inspect } from "util";
 import { Type } from "@extreme_hero/deeptype";
 
@@ -12,7 +12,7 @@ export default class EvalCommand extends Command {
   }
 
   async run(message, args) {
-    const msg = message, embed = new MenuDocsEmbed();
+    const msg = message, embed = new ShiryoEmbed();
 
     let code = args.join(" ")
       .replace(/[“”]/g, "\"").replace(/[‘’]/g, "'");

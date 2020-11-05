@@ -1,4 +1,4 @@
-import { Listener, MenuDocsEmbed } from "@lib";
+import { Listener, ShiryoEmbed } from "@lib";
 
 export default class extends Listener {
 
@@ -8,7 +8,7 @@ export default class extends Listener {
     const attachments = message.attachments.size ?
       message.attachments.map((attachment) => attachment.proxyURL) :
       null;
-    const embed = new MenuDocsEmbed()
+    const embed = new ShiryoEmbed()
       .setColor("BLUE")
       .setAuthor(
         message.author.tag,

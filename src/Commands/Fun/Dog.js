@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { Command, MenuDocsEmbed } from "@lib";
+import { Command, ShiryoEmbed } from "@lib";
 import { IMG_EXT } from "./Cat";
 
 const subreddit = () => {
@@ -15,7 +15,7 @@ export default class DogCommand extends Command {
         .then((res) => res.data.filter((post) => IMG_EXT.includes(post.ext))),
       selected = data[Math.floor(Math.random() * data.length)];
 
-    const embed = new MenuDocsEmbed().setImage(
+    const embed = new ShiryoEmbed().setImage(
       `https://imgur.com/${selected.hash}${selected.ext.replace(/\?.*/, "")}`
     );
 
