@@ -1,9 +1,8 @@
 import { dirname, join, parse } from "path";
-import { promisify } from "util";
+import { lstatSync, readdirSync } from "fs";
+
 import { Command as BaseCommand } from "../Classes/Command";
 import { Listener as BaseListener } from "../Classes/Listener";
-
-const glob = promisify(require("glob"));
 
 export class Util {
 
@@ -68,59 +67,100 @@ export class Util {
   }
 
   async loadCommands() {
-    return glob(join(this.directory, "Commands", "**", "*.js")).then(
-      (commands) => {
-        for (const commandFile of commands) {
-          delete require.cache[commandFile];
+    const directory = join(this.directory, "commands"),
+      files = this.walk(directory);
 
-          const { name } = parse(commandFile);
-          const imported = require(commandFile);
+    for (const file of files) {
+      delete require.cache[file];
+      const { name } = parse(file),
+        Command = this.findClass(require(file));
 
-          const Command = "default" in imported ? imported.default : imported;
-          if (!this.isClass(Command)) {
-            throw new TypeError(`Command ${name} doesn't export a class.`);
-          }
+      if (!Command) {
+        throw new TypeError(`Command ${name} doesn't export a class.`);
+      }
 
-          const command = new Command(this.client, name.toLowerCase());
-          if (!(command instanceof BaseCommand)) {
-            throw new TypeError(`Comamnd ${name} doesnt belong in Commands.`);
-          }
+      const command = new Command(this.client, name.toLowerCase());
+      if (!(command instanceof BaseCommand)) {
+        throw new TypeError(`Command ${name} doesnt belong in "commands".`);
+      }
 
-          this.client.commands.set(command.name, command);
-          if (command.aliases.length) {
-            for (const alias of command.aliases) {
-              this.client.aliases.set(alias, command.name);
-            }
-          }
+      this.client.commands.set(command.name, command);
+      if (command.aliases.length) {
+        for (const alias of command.aliases) {
+          this.client.aliases.set(alias, command.name);
         }
       }
-    );
+    }
   }
 
   async loadEvents() {
-    return glob(join(this.directory, "Events", "**", "*.js")).then((events) => {
-      for (const eventFile of events) {
-        delete require.cache[eventFile];
+    const directory = join(this.directory, "events"),
+      files = this.walk(directory);
 
-        const { name } = parse(eventFile);
-        const imported = require(eventFile);
+    for (const file of files) {
+      delete require.cache[file];
+      const { name } = parse(file),
+        Event = this.findClass(require(file));
 
-        const Listener = "default" in imported ? imported.default : imported;
-        if (!this.isClass(Listener)) {
-          throw new TypeError(`Event ${name} doesn't export a class!`);
-        }
-
-        const listener = new Listener(this.client, name);
-        if (!(listener instanceof BaseListener)) {
-          throw new TypeError(`Event ${name} doesn't belong in Events`);
-        }
-
-        this.client.events.set(listener.name, listener);
-        listener.emitter[listener.type](name, (...args) =>
-          listener.run(...args)
-        );
+      if (!Event) {
+        throw new TypeError(`Event ${name} doesn't export a class!`);
       }
-    });
+
+      const event = new Event(this.client, name);
+      if (!(event instanceof BaseListener)) {
+        throw new TypeError(`Event ${name} doesn't belong in Events`);
+      }
+
+      this.client.events.set(event.name, event);
+      event.emitter[event.type](name, (...args) => event.run(...args));
+    }
+  }
+
+  /**
+   * @param {Record} module The imported module.
+   * @returns {Record | null}
+   */
+  findClass(module) {
+    if (module.__esModule) {
+      const def = Reflect.get(module, "default");
+      if (this.isClass(def)) {
+        return def;
+      }
+
+      let _class = null;
+      for (const prop of Object.keys(module)) {
+        const ref = Reflect.get(module, prop);
+        if (this.isClass(ref)) {
+          _class = ref;
+          break;
+        }
+      }
+
+      return _class;
+    }
+
+    return this.isClass(module) ? module : null;
+  }
+
+  /**
+   * @param {string} directory The directory to walk.
+   * @returns {string[]} The files.
+   */
+  walk(directory) {
+    function read(dir, files = []) {
+      for (const file of readdirSync(dir)) {
+        const path = join(dir, file), stats = lstatSync(path);
+        if (stats.isFile() && path.endsWith(".js")) {
+          files.push(file);
+        } else if (stats.isDirectory()) {
+          files = files.concat(read(path, files));
+        }
+      }
+
+      return files;
+    }
+
+    return read(directory);
   }
 
 }
