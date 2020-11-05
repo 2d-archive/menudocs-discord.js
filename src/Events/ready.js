@@ -27,7 +27,7 @@ export default class ReadyEvent extends Listener {
     await this.client.user.setActivity(activities()[0]);
 
     let i = 0;
-    setInterval(() => {
+    this.client.setInterval(() => {
       const __activities = activities(),
         activity = __activities[i++ % __activities.length];
 
